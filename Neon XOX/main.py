@@ -17,7 +17,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
-CC_SIZE = 150
+CC_SIZE = 140
 
 COORDINATE_MAPPING_RECT = {
     1:pygame.Rect(215, 155, CC_SIZE, CC_SIZE),
@@ -50,7 +50,6 @@ CROSS_IMG = pygame.image.load(os.path.join('Assets', 'Cross.png'))
 CIRCLE = pygame.transform.scale(CIRCLE_IMG, (150, 150))
 CROSS = pygame.transform.scale(CROSS_IMG, (150, 150))
 
-
 BG_IMG = pygame.image.load(os.path.join("Assets", 'bg.png'))
 BG_IMG = pygame.transform.scale(BG_IMG, (WIDTH, HEIGHT))
 
@@ -73,7 +72,7 @@ def draw_window(user, clicked_number):
     WIN.blit(BG_IMG, (0, 0))                                       
     WIN.blit(BOX,(WIDTH//2 - 480/2, HEIGHT//2 - 480/2 + 50))        
     WIN.blit(LOGO, (WIDTH//2 - 274/2, 20))
-
+    
     if user == 1:
         draw_player1_turn = PLAYERS_TURN_FONT.render("PLAYER 1", 1, WHITE)
         WIN.blit(draw_player1_turn, (40, HEIGHT//2))
@@ -96,6 +95,11 @@ def draw_window(user, clicked_number):
 
 
 def check(winner_text):
+    allalpha = all(isinstance(item, str) for item in row)
+    if allalpha:
+        winner_text = 'Game Tied!'
+        return winner_text
+    
     if row[1] == row[2] == row[3] == 'O' or row[4] == row[5] == row[6] == 'O' or row[7] == row[8] == row[9] == 'O' or row[1] == row[4] == row[7] == 'O' or row[2] == row[5] == row[8] == 'O' or row[3] == row[6] == row[9] == 'O' or row[1] == row[5] == row[9] == 'O' or row[3] == row[5] == row[7] == 'O':
         winner_text = 'Player 2 Won!'
         return winner_text
@@ -103,7 +107,7 @@ def check(winner_text):
     if row[1] == row[2] == row[3] == 'X' or row[4] == row[5] == row[6] == 'X' or row[7] == row[8] == row[9] == 'X' or row[1] == row[4] == row[7] == 'X' or row[2] == row[5] == row[8] == 'X' or row[3] == row[6] == row[9] == 'X' or row[1] == row[5] == row[9] == 'X' or row[3] == row[5] == row[7] == 'X':
         winner_text = 'Player 1 Won!'
         return winner_text
-
+    
 def main(user):
     clock = pygame.time.Clock()
     clicked_number = 0
@@ -113,7 +117,7 @@ def main(user):
     winner_text = ""
 
     global row
-    row = [0, 1, 2, 3,
+    row = ['ay', 1, 2, 3,
               4, 5, 6,
               7, 8, 9]
 
@@ -147,6 +151,13 @@ def main(user):
 
         draw_window(user, clicked_number)
 
+        if win == "Game Tied!":
+            draw_win = WINNER_FONT.render("Game Tied", 1, RED)
+            WIN.blit(draw_win, (WIDTH//2 - 185, HEIGHT//2))
+            pygame.display.update()
+            pygame.time.delay(2000)
+            break
+
         if win == "Player 1 Won!":
             draw_win = WINNER_FONT.render("Player 1 Won!", 1, RED)
             WIN.blit(draw_win, (WIDTH//2 - 225, HEIGHT//2))
@@ -160,6 +171,7 @@ def main(user):
             pygame.display.update()
             pygame.time.delay(2000)
             break
+
         
 if __name__ == '__main__':
     main(user)
